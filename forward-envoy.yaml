@@ -1,0 +1,26 @@
+static_resources:
+  listeners:
+  - address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: 80
+clusters:
+- name: proxy
+  connect_timeout: 0.25s
+  type: static
+  lb_policy: round_robin
+  load_assignment:
+    cluster_name: proxy
+    endpoints:
+    - lb_endpoints:
+      - endpoint:
+          address:
+            socket_address: 
+              address: proxy
+              port_value: 80
+admin:
+  access_log_path: "/dev/null"
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: 8001

@@ -1,0 +1,43 @@
+version: "3.7"
+services:
+
+  forward-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-forward
+    volumes:
+      - ./forward-envoy.yaml:/etc/forward-envoy.yaml
+    networks:
+      - envoymesh
+    expose:
+      - "80"
+      - "8001"
+    ports:
+      - "8000:80"
+      - "8001:8001"
+
+  proxy-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-proxy
+    volumes:
+      - ./proxy-envoy.yaml:/etc/proxy-envoy.yaml
+    networks:
+      envoymesh:
+        aliases:
+          - proxy
+    expose:
+      - "80"
+      - "443"
+
+  httpbin:
+    image: kennethreitz/httpbin
+    networks:
+      envoymesh:
+        aliases:
+          - httpbin
+    ports:
+      - "8080:80"
+
+networks:
+  envoymesh: {}
