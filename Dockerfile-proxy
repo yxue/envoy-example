@@ -2,4 +2,4 @@ FROM envoyproxy/envoy-dev:latest
 
 RUN apt-get update && apt-get -q install -y \
     curl
-CMD /usr/local/bin/envoy -c /etc/proxy-envoy.yaml --service-cluster proxy-envoy
+CMD /usr/local/bin/envoy -c /etc/proxy-envoy.yaml --service-cluster proxy-envoy --log-path /tmp/elog --log-level debug

@@ -28,7 +28,10 @@ services:
           - proxy
     expose:
       - "80"
-      - "443"
+      - "8001"
+    ports:
+      - "9090:80"
+      - "9001:8001"
 
   httpbin:
     image: kennethreitz/httpbin
