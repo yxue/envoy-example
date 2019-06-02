@@ -39,6 +39,11 @@ static_resources:
               socket_address: 
                 address: proxy
                 port_value: 80
+        - endpoint:
+            address:
+              socket_address:
+                address: proxy
+                port_value: 443
 admin:
   access_log_path: "/dev/null"
   address:
