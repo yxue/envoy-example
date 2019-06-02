@@ -22,6 +22,8 @@ services:
       dockerfile: Dockerfile-proxy
     volumes:
       - ./proxy-envoy.yaml:/etc/proxy-envoy.yaml
+      - ./cert.pem:/etc/cert.pem
+      - ./key.pem:/etc/key.pem
     networks:
       envoymesh:
         aliases:
