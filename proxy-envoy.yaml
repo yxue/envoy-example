@@ -38,7 +38,7 @@ static_resources:
             address:
               socket_address:
                 address: httpbin
-                port_value: 8080
+                port_value: 80
 admin:
   access_log_path: "/dev/null"
   address:

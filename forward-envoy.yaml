@@ -38,7 +38,7 @@ static_resources:
             address:
               socket_address: 
                 address: proxy
-                port_value: 9090
+                port_value: 80
 admin:
   access_log_path: "/dev/null"
   address:
