@@ -1,5 +1,3 @@
-FROM envoyproxy/envoy-dev:latest
+FROM envoyproxy/envoy-alpine-debug-dev:latest
 
-RUN apt-get update && apt-get -q install -y \
-    curl
-CMD /usr/local/bin/envoy -c /etc/forward-envoy.yaml --service-cluster forward-envoy --log-path /tmp/elog --log-level debug
+CMD /usr/local/bin/envoy -c /etc/forward-envoy.yaml --service-cluster forward-envoy --log-path /tmp/elog --log-level trace

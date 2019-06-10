@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile-forward
     volumes:
       - ./forward-envoy.yaml:/etc/forward-envoy.yaml
+      - ./envoy-static:/usr/local/bin/envoy
     networks:
       - envoymesh
     expose:
@@ -22,6 +23,7 @@ services:
       dockerfile: Dockerfile-proxy
     volumes:
       - ./proxy-envoy.yaml:/etc/proxy-envoy.yaml
+      - ./envoy-static:/usr/local/bin/envoy
       - ./cert.pem:/etc/cert.pem
       - ./key.pem:/etc/key.pem
     networks:

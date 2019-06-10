@@ -44,7 +44,8 @@ static_resources:
               socket_address:
                 address: proxy
                 port_value: 443
-    tls_context: {}
+    tls_context:
+      allow_downgrade: true
 admin:
   access_log_path: "/dev/null"
   address:
