@@ -1,6 +1,16 @@
 #!/bin/bash
 
-cd ~/envoy && bazel build //source/exe:envoy-static && cd ~/Envoy-Example
+if [ "$1" == "" ]; then
+  echo "specify folder"
+  ls $(pwd) -F
+  exit 0
+fi
+
+dir="$(pwd)/$1"
+
+cd ~/envoy && bazel build //source/exe:envoy-static && cd $dir
+
+pwd
 
 cp -f ~/envoy/bazel-bin/source/exe/envoy-static ./
 
