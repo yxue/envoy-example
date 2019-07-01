@@ -45,6 +45,7 @@ static_resources:
                 address: server
                 port_value: 443
         locality:
+          region: region
           zone: zone
           sub_zone: sub_zone
 admin:
