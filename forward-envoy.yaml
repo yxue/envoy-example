@@ -36,16 +36,31 @@ static_resources:
       - lb_endpoints:
         - endpoint:
             address:
-              socket_address: 
+              socket_address:
                 address: proxy
                 port_value: 80
+          load_balancing_weight: 1
         - endpoint:
             address:
               socket_address:
                 address: proxy
                 port_value: 443
-    tls_context:
-      allow_downgrade: true
+          load_balancing_weight: 1
+        load_balancing_weight: 1
+        locality:
+          zone: zone
+          sub_zone: sub_zone
+    transport_socket:
+      name: envoy.transport_sockets.permissive
+      typed_config:
+        "@type": type.googleapis.com/envoy.config.transport_socket.permissive.v2alpha.Permissive
+        allow_fallback: true
+        primary_transport_socket:
+          name: tls
+          config: {}
+        secondary_transport_socket:
+          name: raw_buffer
+          config: {}
 admin:
   access_log_path: "/dev/null"
   address:
