@@ -33,21 +33,38 @@ static_resources:
     load_assignment:
       cluster_name: server
       endpoints:
-      - lb_endpoints:
+      - locality:
+          region: US-West
+          zone: az1
+          sub_zone: sub1
+        priority: 0
+        lb_endpoints:
         - endpoint:
             address:
               socket_address:
                 address: server
+                port_value: 80
+      - locality:
+          region: Asia-East
+          zone: az1
+          sub_zone: sub1
+        priority: 0
+        lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 34.230.136.58
+                port_value: 80
+        - endpoint:
+            address:
+              socket_address:
+                address: httpbin.org
                 port_value: 80
         - endpoint:
             address:
               socket_address:
                 address: server
                 port_value: 443
-        locality:
-          region: region
-          zone: zone
-          sub_zone: sub_zone
 admin:
   access_log_path: "/dev/null"
   address:
