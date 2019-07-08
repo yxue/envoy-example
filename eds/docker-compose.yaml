@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+
+  client-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-client
+    volumes:
+      - ./client-envoy.yaml:/etc/client-envoy.yaml
+      - ./envoy-static:/usr/local/bin/envoy
+    networks:
+      - envoymesh
+    expose:
+      - "80"
+      - "8001"
+    ports:
+      - "8000:80"
+      - "8001:8001"
+
+  server-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+    volumes:
+      - ./server-envoy.yaml:/etc/server-envoy.yaml
+      - ./envoy-static:/usr/local/bin/envoy
+    networks:
+      envoymesh:
+        aliases:
+          - server
+    expose:
+      - "80"
+      - "443"
+      - "8001"
+    ports:
+      - "9090:80"
+      - "8888:443"
+      - "9001:8001"
+
+  httpbin:
+    image: kennethreitz/httpbin
+    networks:
+      envoymesh:
+        aliases:
+          - httpbin
+    ports:
+      - "8080:80"
+
+networks:
+  envoymesh: {}

@@ -1,0 +1,3 @@
+FROM envoyproxy/envoy-alpine-debug-dev:latest
+
+CMD /usr/local/bin/envoy -c /etc/server-envoy.yaml --service-cluster server-envoy --log-path /tmp/elog --log-level trace

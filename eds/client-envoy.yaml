@@ -28,43 +28,28 @@ static_resources:
   clusters:
   - name: server
     connect_timeout: 0.25s
+    type: eds
+    lb_policy: round_robin
+    eds_cluster_config:
+      eds_config:
+        api_config_source:
+          api_type: REST
+          cluster_names:
+          - eds
+          refresh_delay: 1s
+  - name: eds
+    connect_timeout: 0.25s
     type: strict_dns
     lb_policy: round_robin
     load_assignment:
-      cluster_name: server
+      cluster_name: eds
       endpoints:
-      - locality:
-          region: US-West
-          zone: az1
-          sub_zone: sub1
-        priority: 0
-        lb_endpoints:
+      - lb_endpoints:
         - endpoint:
             address:
               socket_address:
                 address: server
                 port_value: 80
-      - locality:
-          region: Asia-East
-          zone: az1
-          sub_zone: sub1
-        priority: 1
-        lb_endpoints:
-        - endpoint:
-            address:
-              socket_address:
-                address: 34.230.136.58
-                port_value: 80
-        - endpoint:
-            address:
-              socket_address:
-                address: httpbin.org
-                port_value: 80
-        - endpoint:
-            address:
-              socket_address:
-                address: server
-                port_value: 443
 admin:
   access_log_path: "/dev/null"
   address:
