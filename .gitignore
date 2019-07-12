@@ -1,3 +1,4 @@
 *.pem
 output/*
 /*/envoy-static
+elog
