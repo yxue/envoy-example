@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+
+  client-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy
+    volumes:
+      - ./client-envoy.yaml:/etc/client-envoy.yaml
+      - ./envoy-static:/usr/local/bin/envoy
+    networks:
+      - envoymesh
+    expose:
+      - "80"
+      - "15001"
+    ports:
+      - "8000:80"
+      - "15001:15001"
+
+networks:
+  envoymesh: {}

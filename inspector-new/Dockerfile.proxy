@@ -1,0 +1,22 @@
+# BASE_DISTRIBUTION is used to switch between the old base distribution and distroless base images
+ARG BASE_DISTRIBUTION=default
+
+# The following section is used as base image if BASE_DISTRIBUTION=default
+FROM debian:stable as default
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    iproute2 \
+    iptables \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Sudoers used to allow tcpdump and other debug utilities.
+RUN useradd -m --uid 1337 istio-proxy && \
+    echo "istio-proxy ALL=NOPASSWD: ALL" >> /etc/sudoers
+
+ADD istio-iptables.sh /
+
+# ENTRYPOINT ["/usr/local/bin/istio-iptables.sh"]
+
+FROM ${BASE_DISTRIBUTION}
+
+CMD /usr/local/bin/envoy -c /etc/client-envoy.yaml --service-cluster client-envoy --log-path /tmp/elog --log-level trace
