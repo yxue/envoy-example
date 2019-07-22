@@ -8,7 +8,7 @@ fi
 
 dir="$(pwd)/$1"
 
-cd ~/envoy && bazel build --config=libc++ //source/exe:envoy-static && cd $dir
+cd ~/envoy && bazel build //source/exe:envoy-static && cd $dir
 
 pwd
 

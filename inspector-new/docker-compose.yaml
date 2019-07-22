@@ -4,17 +4,20 @@ services:
   client-envoy:
     build:
       context: .
-      dockerfile: Dockerfile.proxy
+      dockerfile: Dockerfile-client
     volumes:
       - ./client-envoy.yaml:/etc/client-envoy.yaml
       - ./envoy-static:/usr/local/bin/envoy
     networks:
       - envoymesh
+    user: 1337:1337
     expose:
-      - "80"
+      - "8000"
+      - "8001"
       - "15001"
     ports:
-      - "8000:80"
+      - "8000:8000"
+      - "8001:8001"
       - "15001:15001"
 
 networks:

@@ -3,7 +3,7 @@ static_resources:
   - address:
       socket_address:
         address: 0.0.0.0
-        port_value: 80
+        port_value: 8000
     filter_chains:
     - filters:
       - name: envoy.http_connection_manager
@@ -83,18 +83,18 @@ static_resources:
   #               address: httpbin.org
   #               port_value: 80
   - name: http
-     connect_timeout: 0.25s
-     type: strict_dns
-     lb_policy: round_robin
-     load_assignment:
-       cluster_name: http
-       endpoints:
-       - lb_endpoints:
-         - endpoint:
-             address:
-               socket_address:
-                 address: httpbin.org
-                 port_value: 80
+    connect_timeout: 0.25s
+    type: static
+    lb_policy: round_robin
+    load_assignment:
+      cluster_name: http
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 52.73.47.183
+                port_value: 80
 admin:
   access_log_path: "/dev/null"
   address:
