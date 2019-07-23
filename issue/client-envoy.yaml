@@ -19,30 +19,64 @@ static_resources:
               - "*"
               routes:
               - match:
-                  prefix: /anything/2
+                  prefix: /1
                 route:
-                  cluster: server
+                  prefix_rewrite: /
+                  cluster: h2server
               - match:
-                  prefix: /anything/1
+                  prefix: /2
                 route:
-                  cluster: server
+                  prefix_rewrite: /
+                  cluster: h1server1
+              - match:
+                  prefix: /3
+                route:
+                  prefix_rewrite: /
+                  cluster: h1server2
           http_filters:
           - name: envoy.router
             typed_config: {}
   clusters:
-  - name: server
+  - name: h2server
     connect_timeout: 0.25s
-    type: strict_dns
+    type: static
     lb_policy: round_robin
-    #    http2_protocol_options: {}
+    http2_protocol_options: {}
     load_assignment:
-      cluster_name: server
+      cluster_name: h2server
       endpoints:
       - lb_endpoints:
         - endpoint:
             address:
               socket_address:
-                address: 52.201.109.155
+                address: 139.162.123.134    # nghttp2.org
+                port_value: 80
+  - name: h1server1
+    connect_timeout: 0.25s
+    type: static
+    lb_policy: round_robin
+    http2_protocol_options: {}
+    load_assignment:
+      cluster_name: h1server1
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 52.73.47.183    # httpbin.org
+                port_value: 80
+  - name: h1server2
+    connect_timeout: 0.25s
+    type: static
+    lb_policy: round_robin
+    load_assignment:
+      cluster_name: h1server2
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 52.73.47.183    # httpbin.org
                 port_value: 80
 admin:
   access_log_path: "/dev/null"
