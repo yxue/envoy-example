@@ -25,6 +25,7 @@ static_resources:
           http_filters:
           - name: envoy.router
             typed_config: {}
+          http2_protocol_options: {}
   - address:
       socket_address:
         address: 0.0.0.0

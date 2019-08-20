@@ -29,6 +29,7 @@ static_resources:
           http_filters:
           - name: envoy.router
             typed_config: {}
+          http2_protocol_options: {}
   clusters:
   - name: server
     connect_timeout: 0.25s

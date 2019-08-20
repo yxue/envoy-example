@@ -39,7 +39,8 @@ static_resources:
   clusters:
   - name: h2server
     connect_timeout: 0.25s
-    type: static
+    type: strict_dns
+    respect_dns_ttl: true
     lb_policy: round_robin
     http2_protocol_options: {}
     load_assignment:
@@ -49,7 +50,7 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: 139.162.123.134    # nghttp2.org
+                address: nghttp2.com    # nghttp2.org
                 port_value: 80
   - name: h1server1
     connect_timeout: 0.25s
