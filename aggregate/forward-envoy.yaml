@@ -26,44 +26,44 @@ static_resources:
           - name: envoy.router
             typed_config: {}
   clusters:
+  - name: proxy1
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    http2_protocol_options: {}
+    load_assignment:
+      cluster_name: proxy1
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: httpbin.org
+                port_value: 80
+  - name: proxy2
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    http2_protocol_options: {}
+    load_assignment:
+      cluster_name: proxy2
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 139.162.123.134
+                port_value: 80
   - name: aggregate_cluster
     connect_timeout: 0.25s
+    lb_policy: CLUSTER_PROVIDED
     cluster_type:
       name: envoy.clusters.aggregate
       typed_config:
         "@type": type.googleapis.com/envoy.config.cluster.aggregate.ClusterConfig
-        lb_clusters:
-        - priority: 0
-          cluster:
-            name: proxy1
-            connect_timeout: 0.25s
-            type: strict_dns
-            lb_policy: round_robin
-            load_assignment:
-              cluster_name: proxy1
-              endpoints:
-              - lb_endpoints:
-                - endpoint:
-                    address:
-                      socket_address:
-                        address: proxy
-                        port_value: 80
-        - priority: 0
-          cluster:
-            name: proxy2
-            connect_timeout: 0.25s
-            type: strict_dns
-            lb_policy: round_robin
-            load_assignment:
-              cluster_name: proxy2
-              endpoints:
-              - lb_endpoints:
-                - endpoint:
-                    address:
-                      socket_address:
-                        address: proxy
-                        port_value: 443
-            tls_context: {}
+        clusters:
+        - proxy1
+        - proxy2
 admin:
   access_log_path: "/dev/null"
   address:
