@@ -3,7 +3,7 @@ static_resources:
   - address:
       socket_address:
         address: 0.0.0.0
-        port_value: 80
+        port_value: 8000
     filter_chains:
     - filters:
       - name: envoy.http_connection_manager
@@ -19,51 +19,74 @@ static_resources:
               - "*"
               routes:
               - match:
-                  prefix: /
+                  prefix: /1
                 route:
-                  cluster: aggregate_cluster
+                  prefix_rewrite: /
+                  cluster: h2server
+              - match:
+                  prefix: /2
+                route:
+                  prefix_rewrite: /
+                  cluster: h1server1
+              - match:
+                  prefix: /3
+                route:
+                  prefix_rewrite: /
+                  cluster: h1server2
+              - match:
+                  prefix: /4
+                route:
+                  prefix_rewrite: /
+                  cluster: blackhole
           http_filters:
           - name: envoy.router
             typed_config: {}
   clusters:
-  - name: proxy1
+  - name: h2server
     connect_timeout: 0.25s
     type: strict_dns
+    respect_dns_ttl: true
     lb_policy: round_robin
     http2_protocol_options: {}
     load_assignment:
-      cluster_name: proxy1
+      cluster_name: h2server
       endpoints:
       - lb_endpoints:
         - endpoint:
             address:
               socket_address:
-                address: httpbin.org
+                address: nghttp2.com    # nghttp2.org
                 port_value: 80
-  - name: proxy2
+  - name: h1server1
     connect_timeout: 0.25s
-    type: strict_dns
+    type: static
     lb_policy: round_robin
     http2_protocol_options: {}
     load_assignment:
-      cluster_name: proxy2
+      cluster_name: h1server1
       endpoints:
       - lb_endpoints:
         - endpoint:
             address:
               socket_address:
-                address: 139.162.123.134
+                address: 52.73.47.183    # httpbin.org
                 port_value: 80
-  - name: aggregate_cluster
+  - name: h1server2
     connect_timeout: 0.25s
-    lb_policy: CLUSTER_PROVIDED
-    cluster_type:
-      name: envoy.clusters.aggregate
-      typed_config:
-        "@type": type.googleapis.com/envoy.config.cluster.aggregate.ClusterConfig
-        clusters:
-        - proxy2
-        - proxy1
+    type: static
+    lb_policy: round_robin
+    load_assignment:
+      cluster_name: h1server2
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 52.73.47.183    # httpbin.org
+                port_value: 80
+  - name: blackhole
+    type: STATIC
+    connect_timeout: 10s
 admin:
   access_log_path: "/dev/null"
   address:
