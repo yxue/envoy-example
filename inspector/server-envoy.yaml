@@ -10,8 +10,8 @@ static_resources:
       - name: "envoy.listener.http_inspector"
         typed_config: {}
     filter_chains:
-    # - filter_chain_match:
-    #     application_protocols: ["http/1.1"]
+    - filter_chain_match:
+        application_protocols: ["http/1.1", "h2c"]
       filters:
       - name: envoy.http_connection_manager
         typed_config:
