@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+
+  server-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+    volumes:
+      - ./server-envoy.yaml:/etc/server-envoy.yaml
+      - ./envoy-static:/usr/local/bin/envoy
+    networks:
+      envoymesh:
+        aliases:
+          - server
+    expose:
+      - "443"
+      - "80"
+      - "8001"
+    ports:
+      - "8000:80"
+      - "8888:443"
+      - "8001:8001"
+
+  httpbin:
+    image: kennethreitz/httpbin
+    networks:
+      envoymesh:
+        aliases:
+          - httpbin
+    ports:
+      - "8080:80"
+
+networks:
+  envoymesh: {}
