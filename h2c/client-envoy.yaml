@@ -77,7 +77,7 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: 139.162.123.134
+                address: 34.193.212.251
                 port_value: 80
 admin:
   access_log_path: "/dev/null"
