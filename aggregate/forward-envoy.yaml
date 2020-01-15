@@ -21,6 +21,7 @@ static_resources:
               - match:
                   prefix: /
                 route:
+                  auto_host_rewrite: true
                   cluster: aggregate_cluster
           http_filters:
           - name: envoy.router
@@ -52,7 +53,7 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: 139.162.123.134
+                address: proxy
                 port_value: 80
   - name: aggregate_cluster
     connect_timeout: 0.25s
@@ -60,10 +61,10 @@ static_resources:
     cluster_type:
       name: envoy.clusters.aggregate
       typed_config:
-        "@type": type.googleapis.com/envoy.config.cluster.aggregate.ClusterConfig
+        "@type": type.googleapis.com/envoy.config.cluster.aggregate.v2alpha.ClusterConfig
         clusters:
-        - proxy2
         - proxy1
+        - proxy2
 admin:
   access_log_path: "/dev/null"
   address:
